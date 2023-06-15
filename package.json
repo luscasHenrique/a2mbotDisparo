@@ -5,9 +5,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "node src/server.js"
+    "dev": "node src/server.js",
+    "start": "nodemon src/disp.js"
   },
   "dependencies": {
-    "venom-bot": "^4.0.5"
+    "mysql2": "^3.3.0",
+    "node-schedule": "^2.1.1",
+    "nodemon": "^2.0.22",
+    "sequelize": "^6.31.1",
+    "venom-bot": "^5.0.1"
   }
 }
