@@ -18,4 +18,4 @@ async function dialogo1(client, message) {
       console.error("Error when sending: ", erro); //return object error
     });
 }
-export default dialogo1;
+module.exports = dialogo1;

@@ -11,4 +11,4 @@ async function dialogoInicial(client, message) {
     });
 }
 
-export default dialogoInicial;
+module.exports = dialogoInicial;

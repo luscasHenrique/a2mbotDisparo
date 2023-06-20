@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
+const { DataTypes } = require("sequelize");
 
 // Importar o conector do banco
-import sequelize from "../db/conn.js";
+const sequelize = require ("../db/conn.js");
 
 const Clientes = sequelize.define("clientes", {
   nome: {
@@ -18,4 +18,4 @@ const Clientes = sequelize.define("clientes", {
   },
 });
 
-export default Clientes;
+module.exports = Clientes;

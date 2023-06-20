@@ -11,4 +11,4 @@ async function dialogoOrçamento(client, message) {
     });
 }
 
-export default dialogoOrçamento;
+module.exports = dialogoOrçamento;

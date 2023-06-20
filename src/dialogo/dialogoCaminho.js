@@ -11,4 +11,4 @@ async function dialogoCaminho(client, message) {
     });
 }
 
-export default dialogoCaminho;
+module.exports = dialogoCaminho;

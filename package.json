@@ -1,18 +1,21 @@
 {
-  "name": "botwhatsapp",
-  "type": "module",
+  "name": "venom-5.0.5",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "license": "MIT",
   "scripts": {
-    "dev": "node src/server.js",
-    "start": "nodemon src/disp.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/disp.js"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "mysql2": "^3.3.0",
+    "moment": "^2.29.4",
+    "mysql2": "^3.4.0",
     "node-schedule": "^2.1.1",
-    "nodemon": "^2.0.22",
-    "sequelize": "^6.31.1",
-    "venom-bot": "^5.0.1"
+    "puppeteer": "^19.4.0",
+    "schedule": "^0.5.0",
+    "sequelize": "^6.32.1",
+    "venom-bot": "^5.0.5"
   }
 }

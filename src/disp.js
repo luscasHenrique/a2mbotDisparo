@@ -1,15 +1,14 @@
-import conn from "./db/conn.js";
-import Cliente from "./models/chat.js";
-import schedule from "node-schedule";
-import moment from "moment";
-import { create } from "venom-bot";
-import { Op } from "sequelize";
-import dialogo1 from "./dialogo/dialogo1.js"
-import dialogoInicial from "./dialogo/dialogoInicial.js";
-import dialogoCredencial from "./dialogo/dialogoCredencial.js";
-import dialogoCaminho from "./dialogo/dialogoCaminho.js";
-import dialogoSac from "./dialogo/dialogoSac.js";
-import dialogoOrçamento from "./dialogo/dialogoOrçamento.js";
+const conn = require("./db/conn.js");
+const Cliente = require("./models/chat.js");
+const schedule = require("node-schedule");
+const moment = require("moment");
+const { create } = require("venom-bot");
+const { Op } = require("sequelize");
+const dialogo1 = require("./dialogo/dialogo1");
+const dialogoInicial = require("./dialogo/dialogoInicial");
+const dialogoCredencial = require("./dialogo/dialogoCredencial");
+const dialogoCaminho = require("./dialogo/dialogoCaminho");
+const dialogoSac = require("./dialogo/dialogoSac");
 
 const venomOptions = {
   multiDevice: true,

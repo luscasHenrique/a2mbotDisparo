@@ -11,4 +11,4 @@ async function dialogoCredencial(client, message) {
     });
 }
 
-export default dialogoCredencial;
+module.exports = dialogoCredencial;
