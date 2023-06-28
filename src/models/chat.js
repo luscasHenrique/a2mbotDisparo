@@ -10,10 +10,10 @@ const Clientes = sequelize.define("clientes", {
   telefone: {
     type: DataTypes.STRING,
   },
-  assunto: {
+  tipo: {
     type: DataTypes.STRING,
   },
-  atendido:{
+  quantidade:{
     type: DataTypes.INTEGER,
   },
 });

@@ -4,11 +4,6 @@ const schedule = require("node-schedule");
 const moment = require("moment");
 const { create } = require("venom-bot");
 const { Op } = require("sequelize");
-const dialogo1 = require("./dialogo/dialogo1");
-const dialogoInicial = require("./dialogo/dialogoInicial");
-const dialogoCredencial = require("./dialogo/dialogoCredencial");
-const dialogoCaminho = require("./dialogo/dialogoCaminho");
-const dialogoSac = require("./dialogo/dialogoSac");
 
 const venomOptions = {
   multiDevice: true,
@@ -27,11 +22,12 @@ function start(client) {
 
       const clientes = await Cliente.findAll({
         where: {
-          atendido: {
+          nome: {
             [Op.eq]: atendido,
           },
         },
       });
+      console.log(clientes.nome);
 
       if (clientes.length === 0) {
         console.log("Todos os contatos foram processados!");
@@ -40,17 +36,14 @@ function start(client) {
 
       for (const cliente of clientes) {
         const id = cliente.id;
-        const assunto = cliente.assunto;
+        const mensagem = cliente.mensagem;
         const nome = cliente.nome;
-        const atendido = cliente.atendido;
         console.log(assunto);
-
-        let textmsg = `Olá ${nome}, eu sou a Ana, a inteligencia virtual da Tendenci. Vou continuar o seu atendimento por aqui. O seu nome esta correto?`;
 
         const numero = cliente.telefone;
         const numeroDisp = "55" + numero;
         client
-          .sendText(`55${numeroDisp}@c.us`, textmsg)
+          .sendText(`55${numeroDisp}@c.us`, mensagem)
           .then((result) => {
             console.log(`Mensagem enviada para: ${numeroDisp}`);
           })
@@ -70,44 +63,6 @@ function start(client) {
 
       console.log("Todas as mensagens foram enviadas!");
     })();
-
-    // Bote Receptivo
-    client.onMessage((message) => {
-      if (message.isGroupMsg === false) {
-        dialogoInicial(client, message);
-        atendimento[tel].stage = 2;
-      }
-      //chama dialogo inicial
-      if (message.body && atendimento[tel].stage === 1) {
-        dialogoInicial(client, message);
-        atendimento[tel].stage = 2;
-      }
-      //pede o nome e o cpf
-      else if (message.body === "1" && atendimento[tel].stage === 2) {
-        dialogoCredencial(client, message);
-        atendimento[tel].stage = 3;
-      }
-      //Não e cliente ainda
-      else if (message.body === "2" && atendimento[tel].stage === 2) {
-        dialogoCredencial(client, message);
-        atendimento[tel].stage = 4;
-      }
-      //Pergunta se deseja sac ou orçamento
-      else if (message.body && atendimento[tel].stage === 3) {
-        dialogoCaminho(client, message);
-        atendimento[tel].stage = 5;
-      }
-      //Caso queira o orcamento
-      else if (message.body === "1" && atendimento[tel].stage === 5) {
-        dialogoOrçamento(client, message);
-        atendimento[tel].stage = 6;
-      }
-      //caso queira falar no sac
-      else if (message.body === "2" && atendimento[tel].stage === 5) {
-        dialogoSac(client, message);
-        atendimento[tel].stage = 7;
-      }
-    });
   });
 }
 
