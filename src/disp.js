@@ -36,8 +36,15 @@ function start(client) {
 
       for (const cliente of clientes) {
         const id = cliente.id;
-        const mensagem = cliente.mensagem;
         const nome = cliente.nome;
+        const telefone = cliente.telefone;
+        const tipo = cliente.tipo;
+        const protocolo = cliente.protocolo;
+        const status = cliente.status;
+        const data = cliente.data;
+        const horário = cliente.horário;
+        const disparo = cliente.disparo;
+
         console.log(assunto);
 
         const numero = cliente.telefone;

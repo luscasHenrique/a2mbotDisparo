@@ -13,8 +13,20 @@ const Clientes = sequelize.define("clientes", {
   tipo: {
     type: DataTypes.STRING,
   },
-  quantidade:{
+  protocolo:{
     type: DataTypes.INTEGER,
+  },
+  status: {
+    type: DataTypes.STRING,
+  },
+  data: {
+    type: DataTypes.STRING,
+  },
+  horário: {
+    type: DataTypes.STRING,
+  },
+  disparo: {
+    type: DataTypes.STRING,
   },
 });
 
