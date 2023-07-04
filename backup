@@ -1,0 +1,43 @@
+client.onMessage(async (message) => {
+  console.log(message);
+  // Verifica se a messagem é de grupo
+  if (message.isGroupMsg === false && !dados) {
+
+      console.log("Creating new atendimento entry");
+
+      const tel = message.from
+
+      dados[tel] = {
+        tel: tel,
+        nome: message.notifyName,
+        atendido: 1,
+      };
+      dialogo1(client, message)
+      salvaContato(dados[tel]);
+    }
+});
+}
+function salvaContato(tempObj) {
+console.log("Início da função salvaContato");
+console.log("Objeto recebido:", tempObj);
+
+fs.readFile("atendimentos.json", "utf8", (err, data) => {
+  if (err) {
+    console.error("Erro ao ler o arquivo atendimentos.json", err);
+    return;
+  }
+  console.log("Arquivo atendimentos.json lido com sucesso");
+  const atendimentos = JSON.parse(data);
+
+  atendimentos.push(tempObj);
+
+  const json = JSON.stringify(atendimentos, null, 2);
+  fs.writeFile("atendimentos.json", json, "utf8", (err) => {
+    if (err) {
+      console.error("Erro ao escrever o arquivo atendimentos.json", err);
+      return;
+    }
+    console.log("Arquivo atendimentos.json salvo com sucesso");
+  });
+});
+}

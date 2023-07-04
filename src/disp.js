@@ -1,84 +1,100 @@
-const conn = require("./db/conn.js");
-const Cliente = require("./models/chat.js");
-const schedule = require("node-schedule");
-const moment = require("moment");
-const { create } = require("venom-bot");
-const { Op } = require("sequelize");
+const venom = require("venom-bot");
+const fs = require("fs");
+const dialogo1 = require("./dialogos/dialogo1");
 
-const venomOptions = {
-  multiDevice: true,
-  session: "Testes",
-  createPathFileToken: true,
-  waitForLogin: true,
-  createPathFileToken: true,
-};
+const contatos = JSON.parse(fs.readFileSync("contatos.json", "utf8"));
 
-function start(client) {
-  console.log("Cliente Venom iniciado!");
-  // Bot ativo
-  schedule.scheduleJob("*/15 * * * * *", () => {
-    (async () => {
-      const atendido = 0;
+venom
+  .create({
+    session: "Disparo-A2m", //name of session
+  })
+  .then((client) => start(client, 0))
+  .catch((erro) => {
+    console.log(erro);
+  });
 
-      const clientes = await Cliente.findAll({
-        where: {
-          nome: {
-            [Op.eq]: atendido,
-          },
-        },
-      });
-      console.log(clientes.nome);
+async function start(client, index) {
+  console.log("iniciado");
 
-      if (clientes.length === 0) {
-        console.log("Todos os contatos foram processados!");
-        return;
-      }
+  if (index >= contatos.length) {
+    console.log("Todas as mensagens foram enviadas!");
+    return;
+  }
 
-      for (const cliente of clientes) {
-        const id = cliente.id;
-        const nome = cliente.nome;
-        const telefone = cliente.telefone;
-        const tipo = cliente.tipo;
-        const protocolo = cliente.protocolo;
-        const status = cliente.status;
-        const data = cliente.data;
-        const horário = cliente.horário;
-        const disparo = cliente.disparo;
+  const contato = contatos[index];
+  const telefone = contato.telefone;
+  const nome = contato.nome;
+  const id = contato.id;
+  const mensagem = "Olá! Tudo bem?";
 
-        console.log(assunto);
+  const numero = "55" + telefone + "@c.us";
 
-        const numero = cliente.telefone;
-        const numeroDisp = "55" + numero;
-        client
-          .sendText(`55${numeroDisp}@c.us`, mensagem)
-          .then((result) => {
-            console.log(`Mensagem enviada para: ${numeroDisp}`);
-          })
-          .catch((error) => {
-            console.error(
-              `Erro ao enviar mensagem para: ${numeroDisp} - ${error}`
-            );
-          });
+  await client
+    .sendText(numero, mensagem)
+    .then(() => {
+      console.log(
+        `Mensagem enviada para ${nome} no número ${numero}, foram disparados ${id}`
+      );
+      setTimeout(() => {
+        start(client, index + 1); // Chamar a função após 30 segundos
+      }, 20000); // Aguardar 30 segundos
+    })
+    .catch((error) => {
+      console.error(`Erro ao enviar mensagem para: ${numero}`, error);
+      setTimeout(() => {
+        start(client, index + 1); // Chamar a função após 30 segundos, mesmo em caso de erro
+      }, 20000); // Aguardar 30 segundos
+    });
 
-        atualizaAtendimento(id);
+  client.onMessage(async (message) => {
+    console.log(message);
+    // Verifica se a mensagem é de grupo e se o número de telefone já está salvo no JSON
+    if (
+      message.isGroupMsg === false &&
+      !verificarTelefoneExistente(message.from)
+    ) {
+      console.log("Creating new atendimento entry");
 
-        async function atualizaAtendimento(id) {
-          const atendido = 1;
-          await Cliente.update({ atendido }, { where: { id: id } });
-        }
-      }
+      const dados = {
+        tel: message.from,
+        nome: message.notifyName,
+        atendido: 1,
+      };
 
-      console.log("Todas as mensagens foram enviadas!");
-    })();
+      dialogo1(client, message);
+      salvaContato(dados);
+    }
   });
 }
 
-create(venomOptions)
-  .then((client) => start(client))
-  .catch((error) => {
-    console.log(error);
+function verificarTelefoneExistente(telefone) {
+  const atendimentos = JSON.parse(
+    fs.readFileSync("atendimentos.json", "utf8")
+  );
+  return atendimentos.some((item) => item.tel === telefone);
+}
+
+function salvaContato(tempObj) {
+  console.log("Início da função salvaContato");
+  console.log("Objeto recebido:", tempObj);
+
+  fs.readFile("atendimentos.json", "utf8", (err, data) => {
+    if (err) {
+      console.error("Erro ao ler o arquivo atendimentos.json", err);
+      return;
+    }
+    console.log("Arquivo atendimentos.json lido com sucesso");
+    const atendimentos = JSON.parse(data);
+
+    atendimentos.push(tempObj);
+
+    const json = JSON.stringify(atendimentos, null, 2);
+    fs.writeFile("atendimentos.json", json, "utf8", (err) => {
+      if (err) {
+        console.error("Erro ao escrever o arquivo atendimentos.json", err);
+        return;
+      }
+      console.log("Arquivo atendimentos.json salvo com sucesso");
+    });
   });
-conn
-  .sync()
-  .then(() => {})
-  .catch((err) => console.log(err));
+}
