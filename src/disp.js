@@ -47,7 +47,15 @@ async function start(client, index) {
     });
 
   client.onMessage(async (message) => {
-    console.log(message);
+    const atendidos = JSON.parse(fs.readFileSync("atendimentos.json", "utf8"));
+    const atendido = atendidos.tel
+    const cliente = message.from 
+
+    if(atendido === cliente){
+      console.log("Cliente já atendido")
+      return
+    }
+
     // Verifica se a mensagem é de grupo e se o número de telefone já está salvo no JSON
     if (
       message.isGroupMsg === false &&
