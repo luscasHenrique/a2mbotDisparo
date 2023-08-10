@@ -25,7 +25,7 @@ async function start(client, index) {
   const telefone = contato.telefone;
   const nome = contato.nome;
   const id = contato.id;
-  const mensagem = "Olá! Tudo bem?";
+  const mensagem = "Bom dia, tudo bem por aí?";
 
   const numero = "55" + telefone + "@c.us";
 
@@ -37,25 +37,17 @@ async function start(client, index) {
       );
       setTimeout(() => {
         start(client, index + 1); // Chamar a função após 30 segundos
-      }, 20000); // Aguardar 30 segundos
+      }, 30000); // Aguardar 30 segundos
     })
     .catch((error) => {
       console.error(`Erro ao enviar mensagem para: ${numero}`, error);
       setTimeout(() => {
         start(client, index + 1); // Chamar a função após 30 segundos, mesmo em caso de erro
-      }, 20000); // Aguardar 30 segundos
+      }, 30000); // Aguardar 30 segundos
     });
 
   client.onMessage(async (message) => {
-    const atendidos = JSON.parse(fs.readFileSync("atendimentos.json", "utf8"));
-    const atendido = atendidos.tel
-    const cliente = message.from 
-
-    if(atendido === cliente){
-      console.log("Cliente já atendido")
-      return
-    }
-
+    console.log(message);
     // Verifica se a mensagem é de grupo e se o número de telefone já está salvo no JSON
     if (
       message.isGroupMsg === false &&
